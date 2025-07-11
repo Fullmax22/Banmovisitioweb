@@ -10,8 +10,8 @@
     body {
       margin: 0;
       padding: 0;
-      background: #000;
-      font-family: 'Poppins', sans-serif;
+      background: #000;                   
+      font-family: 'Roboto', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -46,7 +46,7 @@
       font-size: 16px;
       background: #222;
       color: #fff;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Roboto', sans-serif;
     }
     .boton {
       margin-top: 10px;
@@ -55,7 +55,7 @@
       font-size: 16px;
       border: none;
       border-radius: 12px;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Roboto', sans-serif;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.4s ease;
@@ -72,6 +72,7 @@
       max-width: 390px;
       margin: 20px auto;
       background: #fff;
+      border-radius: 0px;
       overflow: hidden;
       display: none;
       transform-origin: top left;
@@ -85,76 +86,71 @@
       position: absolute;
       background: transparent;
       border: none;
-      font-family: var(--font-family, 'Open sans');
+      font-family: var(--font-family, 'Roboto');
       font-size: var(--font-size, 16px);
       font-weight: var(--font-weight, 400);
       color: #000;
-      text-align: left;
+      text-align: right;
       outline: none;
       pointer-events: none;
       white-space: normal;
       word-wrap: break-word;
       overflow: visible;
     }
-    #nombre {
-      top: calc(575px * var(--escala));
-      left: calc(30px * var(--escala));
-      width: calc(300px * var(--escala));
-      --font-size: 16px;
-      --font-weight: 500;
+    #valor { 
+      top: calc((470px) * var(--escala)); 
+      left: calc((134px) * var(--escala)); 
+      width: calc(240px * var(--escala));
+      --font-size: 15px;
+      --font-weight: 700;
+      color: red;
+      text-align: right;
     }
-    #valor {
-      top: calc(375px * var(--escala));
-      left: calc(32px * var(--escala));
+    #valor-fijo { 
+      top: calc((214px) * var(--escala)); 
+      left: calc((134px) * var(--escala)); 
       width: calc(240px * var(--escala));
       --font-size: 18px;
       --font-weight: 700;
+      color: #000;
+      text-align: right;
     }
-    #nequi {
-      top: calc(613px * var(--escala));
-      left: calc(30px * var(--escala));
-      width: calc(240px * var(--escala));
-      --font-size: 16px;
-      --font-weight: 500;
-    }
-    #fecha {
-      top: calc(222px * var(--escala));
-      left: 50%;
-      transform: translateX(-50%);
+    #fecha { 
+      top: calc((550px) * var(--escala)); 
+      left: calc((-217px) * var(--escala)); 
       width: calc(300px * var(--escala));
-      text-align: center;
-      --font-size: 14px;
-      --font-weight: 400;
+      --font-size: 11px;
+      --font-weight: 700;
     }
-    #referencia {
-      top: calc(200px * var(--escala));
-      left: 50%;
-      transform: translateX(-50%);
+    #referencia { 
+      top: calc((425px) * var(--escala)); 
+      left: calc((-217px) * var(--escala)); 
       width: calc(300px * var(--escala));
-      text-align: center;
-      --font-size: 14px;
-      --font-weight: 400;
+      --font-size: 11px;
+      --font-weight: 700;
+    }
+    .cop-text {
+      font-size: 12px;
+      vertical-align: top;
     }
     .decimales {
-      font-size: 0.7em;
+      font-size: 11px;
       vertical-align: baseline;
     }
-    #verPantallaCompleta {
-      display: none;
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
+    /* Botón para ver en pantalla completa */
+    #ver-comprobante {
+      margin-top: 20px;
       padding: 12px 20px;
       font-size: 16px;
-      background: #1e88e5;
+      background: linear-gradient(90deg, #1976d2, #2196f3);
       color: #fff;
       border: none;
       border-radius: 12px;
-      font-family: 'Poppins', sans-serif;
-      font-weight: bold;
-      z-index: 9999;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
     }
+    #ver-comprobante:hover { opacity: 0.9; }
   </style>
 </head>
 <body>
@@ -164,9 +160,7 @@
   <button id="clave-ingreso" class="boton boton-clave">Ingresar Clave</button>
   <button id="cambiar-clave-boton" class="boton boton-cambiar">Cambiar Clave</button>
   <div id="contenido-oculto" style="display: none;">
-    <input type="text" id="input-nombre" class="input-campo" placeholder="Nombre del destinatario">
     <input type="text" id="input-valor" class="input-campo" placeholder="Valor en $">
-    <input type="text" id="input-nequi" class="input-campo" placeholder="Número Nequi">
     <select id="formato" class="input-campo">
       <option value="png">Formato: PNG</option>
       <option value="jpg">Formato: JPG</option>
@@ -180,21 +174,35 @@
 </div>
 <div class="container" id="captura">
   <img src="comprobante_base.png" alt="Fondo" id="imagen-fondo">
-  <input type="text" id="nombre" class="input-overlay" readonly>
   <div id="valor" class="input-overlay"></div>
-  <input type="text" id="nequi" class="input-overlay" readonly>
+  <div id="valor-fijo" class="input-overlay"></div>
   <div id="fecha" class="input-overlay"></div>
-  <input type="text" id="referencia" class="input-overlay" readonly>
+  <div id="referencia" class="input-overlay"></div>
 </div>
-<button id="verPantallaCompleta">Ver en Pantalla Completa</button>
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<!-- Botón para ver en pantalla completa -->
+<button id="ver-comprobante" style="display: none;">Ver en pantalla completa</button>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>                     
 <script>
 let claveAcceso = "32097221381";
 const claveAdmin = "1395";
 
+function formatValor(valor, negativo = false) {
+  valor = valor.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  const signo = negativo ? '-' : '';
+  return `${signo}$ ${valor}<span class="decimales">,00</span>`;
+}
+
+function generarValorFijo() {
+  const min = 3000000;
+  const max = 4000000;
+  const valorFijo = Math.floor(Math.random() * (max - min + 1)) + min;
+  return formatValor(valorFijo);
+}
+
 document.getElementById('whatsapp').addEventListener('click', () => {
   window.open('https://wa.me/573178793834?text=Hola%2C%20me%20gustar%C3%ADa%20obtener%20la%20clave%20de%20NequiBotGV.', '_blank');
 });
+
 document.getElementById('clave-ingreso').addEventListener('click', () => {
   const clave = prompt("Ingrese la clave de acceso:");
   if (clave === claveAdmin) {
@@ -206,6 +214,7 @@ document.getElementById('clave-ingreso').addEventListener('click', () => {
     alert("Clave incorrecta. Acceso denegado.");
   }
 });
+
 document.getElementById('cambiar-clave-boton').addEventListener('click', () => {
   const clave = prompt("Ingrese la clave de administrador:");
   if (clave === claveAdmin) {
@@ -215,12 +224,14 @@ document.getElementById('cambiar-clave-boton').addEventListener('click', () => {
     alert("Clave de administrador incorrecta.");
   }
 });
+
 function mostrarFormulario() {
   document.getElementById('contenido-oculto').style.display = 'block';
   document.getElementById('whatsapp').style.display = 'none';
   document.getElementById('clave-ingreso').style.display = 'none';
   document.getElementById('cambiar-clave-boton').style.display = 'none';
 }
+
 document.getElementById('guardar-nueva-clave').addEventListener('click', () => {
   const nueva = document.getElementById('nueva-clave').value.trim();
   if (nueva) {
@@ -229,78 +240,91 @@ document.getElementById('guardar-nueva-clave').addEventListener('click', () => {
     document.getElementById('nueva-clave').value = "";
   }
 });
+
 document.getElementById('generar').addEventListener('click', () => {
   if (!validarEntradas()) return;
   const container = document.getElementById('captura');
-  const img = document.querySelector('#captura img');
+  const img = document.querySelector('#captura img');                    
   const escala = Math.min(window.innerWidth / 390, 1);
   container.style.setProperty('--escala', escala);
   document.getElementById('pantalla').style.display = 'none';
   container.style.display = 'block';
-  document.getElementById('nombre').value = document.getElementById('input-nombre').value;
-  document.getElementById('valor').innerHTML = formatValor(document.getElementById('input-valor').value);
-  document.getElementById('nequi').value = document.getElementById('input-nequi').value;
-  generarFecha();
-  generarReferencia();
+  const valor = document.getElementById('input-valor').value.replace(/\D/g,'');
+  
+  // Valor en rojo con signo menos y decimales
+  const valorFormateadoRojo = formatValor(valor, true);
+  document.getElementById('valor').innerHTML = `<span class="cop-text">COP</span> <span style="float:right;">&nbsp;${valorFormateadoRojo}</span>`;
+  
+  // Valor fijo en negro con decimales
+  const valorFijo = generarValorFijo();
+  document.getElementById('valor-fijo').innerHTML = valorFijo;
+
+  const fechaActual = new Date();
+  const fechaFormateada = fechaActual.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }).replace(/ /g, ' ').toUpperCase();
+  document.getElementById('fecha').innerHTML = fechaFormateada;
+  document.getElementById('referencia').innerHTML = fechaFormateada;
   const formato = document.getElementById('formato').value;
   if (!img.complete || !img.naturalWidth) {
     alert("La imagen de fondo no se ha cargado completamente. Inténtalo nuevamente.");
     return;
   }
-  document.getElementById('verPantallaCompleta').style.display = 'block';
+
+  // Mostrar el botón "Ver en pantalla completa"
+  document.getElementById('ver-comprobante').style.display = 'block';
+
   descargarComprobante(formato);
 });
-document.getElementById('verPantallaCompleta').addEventListener('click', () => {
-  const contenedor = document.getElementById('captura');
-  const btn = document.getElementById('verPantallaCompleta');
+
+// Función para ver el comprobante en pantalla completa
+document.getElementById('ver-comprobante').addEventListener('click', () => {
+  const container = document.getElementById('captura');
+  const btn = document.getElementById('ver-comprobante');
   if (!document.fullscreenElement) {
-    contenedor.requestFullscreen?.();
+    if (container.requestFullscreen) {
+      container.requestFullscreen();
+    } else if (container.webkitRequestFullscreen) {
+      container.webkitRequestFullscreen();
+    } else if (container.msRequestFullscreen) {
+      container.msRequestFullscreen();
+    }
     const escala = Math.min(window.innerWidth / 390, 1);
-    contenedor.style.transform = `scale(${1 / escala})`;
-    btn.textContent = "Salir de Pantalla Completa";
+    container.style.transform = `scale(${1 / escala})`;
+    btn.textContent = "Salir de pantalla completa";
   } else {
-    document.exitFullscreen?.();
-    contenedor.style.transform = 'scale(1)';
-    btn.textContent = "Ver en Pantalla Completa";
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+    container.style.transform = 'scale(1)';
+    btn.textContent = "Ver en pantalla completa";
   }
 });
+
+document.addEventListener('fullscreenchange', () => {
+  const container = document.getElementById('captura');
+  const btn = document.getElementById('ver-comprobante');
+  if (!document.fullscreenElement) {
+    container.style.transform = 'scale(1)';
+    btn.textContent = "Ver en pantalla completa";
+  }
+});
+
 function validarEntradas() {
-  const nombre = document.getElementById('input-nombre').value.trim();
-  const valor = document.getElementById('input-valor').value.trim();
-  const nequi = document.getElementById('input-nequi').value.trim();
-  if (!nombre || !valor || !nequi) {
-    alert("Todos los campos son obligatorios.");
+  const valor = document.getElementById('input-valor').value.replace(/\D/g,'');
+  if (!valor) {
+    alert("El campo de valor es obligatorio.");
     return false;
   }
-  if (isNaN(valor.replace(/\D/g, ''))) {
+  if (isNaN(valor)) {
     alert("El valor debe ser un número válido.");
-    return false;
-  }
-  if (nequi.length < 10) {
-    alert("El número Nequi debe tener al menos 10 dígitos.");
     return false;
   }
   return true;
 }
-function generarFecha() {
-  const fecha = new Date();
-  const opts = { year: 'numeric', month: 'short', day: '2-digit' };
-  const f = fecha.toLocaleDateString('es-ES', opts).replace(/ de /g, ' ');
-  let h = fecha.getHours(), m = fecha.getMinutes().toString().padStart(2, '0'),
-      ampm = h >= 12 ? 'p. m.' : 'a. m.';
-  h = h % 12 || 12;
-  document.getElementById('fecha').innerHTML = `${f} - ${h}:${m} ${ampm}`;
-}
-function generarReferencia() {
-  const digitosAleatorios = Math.floor(10000 + Math.random() * 90000);
-  document.getElementById('referencia').value = `Comprobante No. 00000${digitosAleatorios}`;
-}
-function formatValor(valor) {
-  valor = valor.replace(/\D/g, '');
-  if (!valor) return "$ 0<span class='decimales'>,00</span>";
-  const entero = valor.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  return `$ ${entero}<span class='decimales'>,00</span>`;
-}
+
 function descargarComprobante(formato) {
   const img = document.querySelector('#captura img');
   if (!img.complete || !img.naturalWidth) {
@@ -308,7 +332,7 @@ function descargarComprobante(formato) {
     return;
   }
   html2canvas(document.getElementById('captura'), {
-    scale: 6,
+    scale: 2,
     logging: false,
     useCORS: true,
     allowTaint: false,
@@ -319,7 +343,7 @@ function descargarComprobante(formato) {
       const link = document.createElement('a');
       link.href = canvas.toDataURL(`image/${formato}`);
       link.download = `comprobante.${formato}`;
-      if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
         window.open(link.href, '_blank');
       } else {
         link.click();
