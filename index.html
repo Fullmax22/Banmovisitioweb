@@ -137,7 +137,6 @@
       font-size: 11px;
       vertical-align: baseline;
     }
-    /* Botón para ver en pantalla completa */
     #ver-comprobante {
       margin-top: 20px;
       padding: 12px 20px;
@@ -179,9 +178,8 @@
   <div id="fecha" class="input-overlay"></div>
   <div id="referencia" class="input-overlay"></div>
 </div>
-<!-- Botón para ver en pantalla completa -->
 <button id="ver-comprobante" style="display: none;">Ver en pantalla completa</button>
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>                     
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script>
 let claveAcceso = "32097221381";
 const claveAdmin = "1395";
@@ -250,12 +248,9 @@ document.getElementById('generar').addEventListener('click', () => {
   document.getElementById('pantalla').style.display = 'none';
   container.style.display = 'block';
   const valor = document.getElementById('input-valor').value.replace(/\D/g,'');
-  
-  // Valor en rojo con signo menos y decimales
+
   const valorFormateadoRojo = formatValor(valor, true);
   document.getElementById('valor').innerHTML = `<span class="cop-text">COP</span> <span style="float:right;">&nbsp;${valorFormateadoRojo}</span>`;
-  
-  // Valor fijo en negro con decimales
   const valorFijo = generarValorFijo();
   document.getElementById('valor-fijo').innerHTML = valorFijo;
 
@@ -269,35 +264,24 @@ document.getElementById('generar').addEventListener('click', () => {
     return;
   }
 
-  // Mostrar el botón "Ver en pantalla completa"
   document.getElementById('ver-comprobante').style.display = 'block';
-
   descargarComprobante(formato);
 });
 
-// Función para ver el comprobante en pantalla completa
 document.getElementById('ver-comprobante').addEventListener('click', () => {
   const container = document.getElementById('captura');
   const btn = document.getElementById('ver-comprobante');
   if (!document.fullscreenElement) {
-    if (container.requestFullscreen) {
-      container.requestFullscreen();
-    } else if (container.webkitRequestFullscreen) {
-      container.webkitRequestFullscreen();
-    } else if (container.msRequestFullscreen) {
-      container.msRequestFullscreen();
-    }
+    if (container.requestFullscreen) container.requestFullscreen();
+    else if (container.webkitRequestFullscreen) container.webkitRequestFullscreen();
+    else if (container.msRequestFullscreen) container.msRequestFullscreen();
     const escala = Math.min(window.innerWidth / 390, 1);
     container.style.transform = `scale(${1 / escala})`;
     btn.textContent = "Salir de pantalla completa";
   } else {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
-    }
+    if (document.exitFullscreen) document.exitFullscreen();
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    else if (document.msExitFullscreen) document.msExitFullscreen();
     container.style.transform = 'scale(1)';
     btn.textContent = "Ver en pantalla completa";
   }
@@ -332,7 +316,7 @@ function descargarComprobante(formato) {
     return;
   }
   html2canvas(document.getElementById('captura'), {
-    scale: 2,
+    scale: 6,  // ✅ Escala máxima realista para mejor calidad
     logging: false,
     useCORS: true,
     allowTaint: false,
